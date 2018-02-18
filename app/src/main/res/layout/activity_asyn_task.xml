@@ -15,4 +15,12 @@
         android:gravity="center"
         android:text="@string/hello_blank_fragment"
         android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/connectivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|center_horizontal"
+        android:text="@string/hello_blank_fragment"
+        android:textSize="30dp" />
 </android.support.constraint.ConstraintLayout>
