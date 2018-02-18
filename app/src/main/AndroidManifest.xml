@@ -3,8 +3,8 @@
     package="com.bot.androidbasic">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".DemoApplication"
@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HomeActivity">
-
             <!-- Android Default invocation -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +31,12 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".AsynTaskActivity"></activity>
+        <activity android:name=".AsynTaskActivity" />
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

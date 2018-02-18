@@ -1,17 +1,24 @@
 package com.bot.androidbasic;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFragmentInteractionListener {
+import java.util.List;
+
+public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFragmentInteractionListener, ServiceConnection {
 
     TextView textView;
+    private MyService myService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +29,7 @@ public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFr
         //Way of accessing intent
         if (action != null) {
             if (action.equals(Intent.ACTION_SEND)) {
-                textView.setText(String.format("%s %s", action, getIntent().getStringExtra(Intent.EXTRA_TEXT)));
+                textView.setText(String.format("%myService %myService", action, getIntent().getStringExtra(Intent.EXTRA_TEXT)));
             } else {
                 textView.setText(action);
             }
@@ -31,6 +38,10 @@ public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFr
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 1")).addToBackStack(null).commit();
         manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 2")).addToBackStack(null).commit();
+    }
+
+    public void startServiceMethod(View view) {
+        Toast.makeText(this, myService.getWordList().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public void openTextIntent(View view) {
@@ -49,7 +60,36 @@ public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFr
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, MyService.class);
+        bindService(intent, this, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unbindService(this);
+    }
+
+    @Override
     public void onFragmentInteraction(String uri) {
         textView.setText(uri);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        MyService.MyBinder b = (MyService.MyBinder) service;
+        myService = b.getService();
+
+        myService.addSome("Random");
+        List<String> wordList = myService.getWordList();
+        Log.e("Data from service", wordList.toString());
+        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        myService = null;
     }
 }
