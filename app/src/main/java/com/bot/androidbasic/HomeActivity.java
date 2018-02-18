@@ -11,44 +11,45 @@ import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity implements DemoFragment.OnFragmentInteractionListener {
 
-  TextView textView;
+    TextView textView;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_home);
-    textView = findViewById(R.id.tvView);
-    final String action = getIntent().getAction();
-    //Way of accessing intent
-    if (action != null) {
-      if (action.equals(Intent.ACTION_SEND)) {
-        textView.setText(String.format("%s %s", action, getIntent().getStringExtra(Intent.EXTRA_TEXT)));
-      } else {
-        textView.setText(action);
-      }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        textView = findViewById(R.id.tvView);
+        final String action = getIntent().getAction();
+        //Way of accessing intent
+        if (action != null) {
+            if (action.equals(Intent.ACTION_SEND)) {
+                textView.setText(String.format("%s %s", action, getIntent().getStringExtra(Intent.EXTRA_TEXT)));
+            } else {
+                textView.setText(action);
+            }
+        }
+
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 1")).addToBackStack(null).commit();
+        manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 2")).addToBackStack(null).commit();
     }
 
-    FragmentManager manager = getSupportFragmentManager();
-    manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 1")).addToBackStack(null).commit();
-    manager.beginTransaction().replace(R.id.content, DemoFragment.newInstance("FRAGMENT 2")).addToBackStack(null).commit();
-  }
+    public void openTextIntent(View view) {
 
-  public void openTextIntent(View view) {
-
-    // Create the text message with a string
-    Intent sendIntent = new Intent();
-    sendIntent.setAction(Intent.ACTION_SEND);
-    sendIntent.putExtra(Intent.EXTRA_TEXT, "Check");
-    sendIntent.setType("text/plain");
-    sendIntent.setPackage(BuildConfig.APPLICATION_ID);
-    // Verify that the intent will resolve to an activity
-    if (sendIntent.resolveActivity(getPackageManager()) != null) {
-      startActivity(sendIntent);
+        startActivity(new Intent(this, AsynTaskActivity.class));
+//        // Create the text message with a string
+//        Intent sendIntent = new Intent();
+//        sendIntent.setAction(Intent.ACTION_SEND);
+//        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check");
+//        sendIntent.setType("text/plain");
+//        sendIntent.setPackage(BuildConfig.APPLICATION_ID);
+//        // Verify that the intent will resolve to an activity
+//        if (sendIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(sendIntent);
+//        }
     }
-  }
 
-  @Override
-  public void onFragmentInteraction(String uri) {
-    textView.setText(uri);
-  }
+    @Override
+    public void onFragmentInteraction(String uri) {
+        textView.setText(uri);
+    }
 }

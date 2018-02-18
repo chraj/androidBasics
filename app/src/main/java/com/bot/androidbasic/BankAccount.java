@@ -9,21 +9,54 @@ public class BankAccount {
 
     public static void main(String args[]) {
 
-        BankAccount harisAccount = new BankAccount(100, 12345, "Harish", "Telangana");
-        BankAccount bhagiAccount = new BankAccount(100, 12346, "Bhagi", "Telangana");
-        BankAccount maruthiAccount = new BankAccount(100, 12347, "Maruthi", "Telangana");
+//        BankAccount harisAccount = new BankAccount(100, 12345, "Harish", "Telangana");
+//        BankAccount bhagiAccount = new BankAccount(100, 12346, "Bhagi", "Telangana");
+//        BankAccount maruthiAccount = new BankAccount(100, 12347, "Maruthi", "Telangana");
+//
+//        System.out.println(harisAccount.toString());
+//        System.out.println(bhagiAccount.toString());
+//        System.out.println(maruthiAccount.toString());
+//
+//        harisAccount = harisAccount.debit(10);
+//        bhagiAccount = bhagiAccount.credit(10);
+//
+//
+//        System.out.println(harisAccount.toString());
+//        System.out.println(bhagiAccount.toString());
+//        System.out.println(maruthiAccount.toString());
 
-        System.out.println(harisAccount.toString());
-        System.out.println(bhagiAccount.toString());
-        System.out.println(maruthiAccount.toString());
 
-        harisAccount = harisAccount.debit(10);
-        bhagiAccount = bhagiAccount.credit(10);
+        //worker thread
 
+        for (int j = 0; j < 100; j++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int n = 0;
+                    while (n < 10) {
+                        n++;
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("Thread 1=" + n);
+                    }
+                }
+            }).start();
+        }
 
-        System.out.println(harisAccount.toString());
-        System.out.println(bhagiAccount.toString());
-        System.out.println(maruthiAccount.toString());
+        //UI thread
+        int n = 0;
+        while (n < 10) {
+            n++;
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Thread 2=" + n);
+        }
 
     }
 
